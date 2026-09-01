@@ -1,38 +1,38 @@
+<b>English</b> | [Русский](https://github.com/MrMouseAtTheDoor/AbletonDownloader-Patcher/blob/main/README.ru.md)
+
 # AbletonDownloader-Patcher
-Самый простой и безопасный метод скачать и пропатчить Ableton Live.
+The easiest and safest way to download and patch Ableton Live.
 
-Поддерживаются все издания и все версии начиная с 9 (9, 10, 11, 12, ...). 
-<br>Работает на Windows и на Linux (Wine).
+All editions and versions starting from 9 (9, 10, 11, 12, ...) are supported.  
+<br>Works on Windows and Linux (Wine).
 
-Это реализация патча R2R и `R2RLIVE.dll` для Ableton Live с открытым исходным кодом, написанная на Python. Как и `R2RLIVE.dll`, этот скрипт использует ТОЛЬКО ключ подписи команды R2R.
+This is an open-source implementation of the R2R patch and `R2RLIVE.dll` of Ableton Live, written in Python. Like `R2RLIVE.dll`, this script uses Team R2R's signing key only.
 
-Это не моя работа, я только скомпелировал python скрипт в exe, чтобы было проще пользоваться и немного изменил внешний вид загрузчика. По сути это форк, но авторов не указываю, потому что, как я понимаю, они более не хотят быть связаны с подобными работами.
+This is not my patcher; I simply compiled the Python script into an exe for easier use and slightly modified the appearance of the downloader. Essentially, this is a fork, but I do not credit the authors because, as I understand it, they no longer wish to be associated with such projects.
 
-
-
-## Как пользоваться
-1. Скачайте последнюю версию AbletonDownloader-Patcher: 
-2. Извлеките всё из архива в одну папку
-### Скачивание Ableton Live
-1. Откройте файл `AbletonDownloader.html` в браузере.
-2. Выберите нужные параметры и укажите необходимую версию Ableton Live (например: 12.4.5, 11.0, 10.0.6, 9.7.7).
-3. Нажмите Generate Download Link — начнётся загрузка программы с официального сайта.
-4. Установите Ableton Live
-<br>Windows: извлеките всё из архива и запустите установщик.
-### Патчинг Ableton Live
-1. Запустите Ableton Live.
-2. В окне авторизации нажмите "No internet on this computer", затем нажмите "Save..." и сохраните файл.
-Этот файл откроется автоматически, или откройте его вручную. Скопируйте оттуда "Your hardware code".
-3. Откройте файл `config.json`
-4. В поле hwid вставьте скопированный hardware code.
-5. Если вы устанавливали Ableton Live не в стандартную папку, замените значение "auto" в поле file_path на путь к исполняемому файлу Ableton Live.
-<br>(Обратную косую черту \ в пути необходимо заменить на двойную обратную косую черту \\).
-<br>Пример: `"file_path": "C:\\Programs\\Ableton Live 12 Suite\\Program\\Ableton Live 12 Suite.exe",`
-6. Укажите нужную версию и издание в полях "version" и "edition".
-7. Сохраните изменения в файле.
-8. Запустите `AbletonPatcher.exe`. Если в file_path стоит "auto", вам будет предложен выбор из установленных версий Ableton Live. Выберите нужную.
-9. Если всё указано верно в `config.json`, Ableton Live будет успешно пропатчен, и в папке output будет создан файл `Authorize.auz`
-10. Запустите Ableton Live и перетащите файл `Authorize.auz` (из папки output) в окно программы.
-11. Рекомендуется отключить автоматические обновления Ableton Live:
-<br>Options → Settings → License & Updates → Get Automatic Updates → Never.
-<br>В противном случае после обновления, возможно, потребуется повторить патчинг.
+## How to use
+1. Download the latest version of AbletonDownloader-Patcher: 
+2. Extract everything from the archive into one folder
+### Downloading Ableton Live
+1. Open the `AbletonDownloader.html` file in your browser.
+2. Select the required parameters and specify the necessary version of Ableton Live (e.g., 12.4.5, 11.0, 10.0.6, 9.7.7).
+3. Click Generate Download Link — the download of the program from the official site will begin.
+4. Install Ableton Live  
+<br>Windows: extract everything from the archive and run the installer.
+### Patching Ableton Live
+1. Launch Ableton Live
+2. In the authorization window, click "No internet on this computer," then click "Save..." and save the file. This file will open automatically, or you can open it manually. Copy "Your hardware code" from there.
+3. Close Ableton Live
+4. Open the `config.json` file
+5. In the hwid field, paste the copied hardware code
+6. If you installed Ableton Live not in the default folder, replace the "auto" value in the file_path field with the path to the Ableton Live executable  
+<br>(Replace the single backslash \ in the path with a double backslash \\)  
+<br>Example: `"file_path": "C:\\Programs\\Ableton Live 12 Suite\\Program\\Ableton Live 12 Suite.exe",`
+7. Specify the required version and edition in the "version" and "edition" fields
+8. Save the changes in the file
+9. Run `AbletonPatcher.exe`. If "auto" is set in file_path, you will be prompted to choose from the installed versions of Ableton Live. Select the desired one.
+10. If everything is correctly specified in `config.json`, Ableton Live will be successfully patched, and a file `Authorize.auz` will be created in the output folder.
+11. Launch Ableton Live and drag the `Authorize.auz` file (from the output folder) into the program window.
+12. It is recommended to disable automatic updates for Ableton Live:  
+<br>Options → Settings → License & Updates → Get Automatic Updates → Never  
+<br>Otherwise, after an update, you may need to repeat the patching process.
