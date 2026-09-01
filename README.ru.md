@@ -13,17 +13,17 @@
 
 
 ## Как пользоваться
-1. Скачайте последнюю версию AbletonDownloader-Patcher: 
+1. [Скачайте последнюю версию AbletonDownloader-Patcher](https://github.com/MrMouseAtTheDoor/AbletonDownloader-Patcher/releases/download/Release/AbletonDownloader-Patcher.zip)
 2. Извлеките всё из архива в одну папку
 ### Скачивание Ableton Live
-1. Откройте файл `AbletonDownloader.html` в браузере.
-2. Выберите нужные параметры и укажите необходимую версию Ableton Live (например: 12.4.5, 11.0, 10.0.6, 9.7.7).
-3. Нажмите Generate Download Link — начнётся загрузка программы с официального сайта.
+1. Откройте файл `AbletonDownloader.html` в браузере
+2. Выберите нужные параметры и укажите необходимую версию Ableton Live (например: 12.4.5, 11.0, 10.0.6, 9.7.7)
+3. Нажмите Generate Download Link — начнётся загрузка программы с официального сайта
 4. Установите Ableton Live
-<br>Windows: извлеките всё из архива и запустите установщик.
+<br>Windows: извлеките всё из архива и запустите установщик
 ### Патчинг Ableton Live
 1. Запустите Ableton Live
-2. В окне авторизации нажмите "No internet on this computer", затем нажмите "Save..." и сохраните файл.
+2. В окне авторизации нажмите "No internet on this computer", затем нажмите "Save..." и сохраните файл
 Этот файл откроется автоматически, или откройте его вручную. Скопируйте оттуда "Your hardware code"
 3. Закройте Ableton Live
 4. Откройте файл `config.json`
