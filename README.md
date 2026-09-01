@@ -8,7 +8,7 @@ All editions and versions starting from 9 (9, 10, 11, 12, ...) are supported.
 
 This is an open-source implementation of the R2R patch and `R2RLIVE.dll` of Ableton Live, written in Python. Like `R2RLIVE.dll`, this script uses Team R2R's signing key only.
 
-This is not my patcher; I simply compiled the Python script into an exe for easier use and slightly modified the appearance of the downloader. Essentially, this is a fork, but I do not credit the authors because, as I understand it, they no longer wish to be associated with such projects.
+This is not my patcher. I only compiled the Python script into an exe for easier use and slightly modified the appearance of the downloader. Essentially, this is a fork, but I do not credit the authors because, as I understand it, they no longer wish to be associated with such projects.
 
 ## How to use
 1. [Download the latest version of AbletonDownloader-Patcher.](https://github.com/MrMouseAtTheDoor/AbletonDownloader-Patcher/releases/download/Release/AbletonDownloader-Patcher.zip)
@@ -26,7 +26,7 @@ This is not my patcher; I simply compiled the Python script into an exe for easi
 4. Open the `config.json` file.
 5. Paste the copied hardware code in the hwid field.
 6. If you installed Ableton Live not in the default folder, replace the "auto" value in the file_path field with the path to the Ableton Live executable.
-<br>(Replace the single backslash \ in the path with a double backslash \\)
+<br>(Replace the single backslash `\` in the path with a double backslash `\\`)
 <br>Example: `"file_path": "C:\\Programs\\Ableton Live 12 Suite\\Program\\Ableton Live 12 Suite.exe",`
 7. Specify the required version and edition in the "version" and "edition" fields.
 8. Save the changes in the file.
