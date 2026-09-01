@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>StaticAbletonDownloader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn-resources.ableton.com/80bA26cPQ1hEJDFjpUKntxfqdmG3ZykO/static/images/favicon.ico" type="image/vnd.icon">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #18181f;
+            --border: rgba(255,255,255,0.07);
+            --accent: #ff4d6d;
+            --accent2: #4daaff;
+            --text: #e8e8f0;
+            --muted: #6b6b80;
+            --selected: #ff4d6d;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+        }
+
+    *, *::before, *::after {
+        margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle animated grid background */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(77,170,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(77,170,255,0.025) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    body::after {
+        content: '';
+        position: fixed;
+        top: -40%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(circle, rgba(255,77,109,0.08) 0%, transparent 60%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+        position: relative;
+        z-index: 1;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 24px 16px 40px;
+        padding-bottom: 60px;
+    }
+
+    /* ── HEADER ── */
+header {
+    text-align: center;
+    padding: 0px 0 16px;
+    animation: fadeDown 0.6s ease both;
+}
+
+    .logo-mark {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--mono);
+        font-size: clamp(0.65rem, 2vw, 0.75rem);
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 7px 16px;
+        border-radius: 999px;
+        margin-bottom: 12px;
+    }
+
+    .logo-mark span { color: var(--accent); }
+
+h1 {
+    font-family: var(--mono);
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+    h1 em {
+        font-style: normal;
+        color: var(--accent);
+    }
+
+    .subtitle {
+        font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+        color: var(--muted);
+        font-weight: 300;
+        max-width: 480px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* ── CARD ── */
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: clamp(20px, 5vw, 36px);
+        margin-bottom: 20px;
+        animation: fadeUp 0.5s ease both;
+    }
+
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(4) { animation-delay: 0.3s; }
+
+    .card-label {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .card-label::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+
+    /* ── PILL SELECTORS (OS / Edition) ── */
+    .pill-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .pill {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--surface2);
+        color: var(--muted);
+        font-family: var(--sans);
+        font-size: clamp(0.78rem, 2vw, 0.88rem);
+        font-weight:500;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        white-space: nowrap;
+        user-select: none;
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .pill:hover {
+        border-color: rgba(77,170,255,0.3);
+        color: var(--text);
+    }
+
+    .pill.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+    }
+
+    .pill i { font-size: 0.8em; opacity: 0.8; }
+
+    /* OS detection badge */
+    .detect-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        color: var(--accent2);
+        font-family: var(--mono);
+        margin-top: 10px;
+    }
+
+    .detect-badge::before {
+        content: '';
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--accent2);
+        animation: pulse 2s infinite;
+    }
+
+    /* ── CUSTOM VERSION ── */
+    .custom-row {
+        display: flex;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .custom-input {
+        flex: 1;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 0.9rem;
+        padding: 12px 16px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        min-width: 0;
+    }
+
+    .custom-input::placeholder { color: var(--muted); font-size: 0.82rem; }
+
+    .custom-input:focus {
+        outline: none;
+        border-color: var(--accent2);
+        box-shadow: 0 0 0 3px rgba(77,170,255,0.15);
+    }
+
+    .custom-input.error {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(255,77,109,0.2);
+    }
+
+    .custom-hint {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 12px;
+        line-height: 1.65;
+    }
+
+    .custom-hint strong {
+        color: var(--accent2);
+        font-weight: 500;
+    }
+
+    .hint-divider {
+        margin: 6px 0;
+        opacity: 0.6;
+    }
+
+    /* ── DOWNLOAD BUTTON ── */
+    .download-btn {
+        width: 100%;
+        padding: clamp(14px, 3vw, 18px) 24px;
+        font-family: var(--mono);
+        font-size: clamp(0.85rem, 2.5vw, 1rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        transition: all 0.2s ease;
+        box-shadow: 0 8px 32px rgba(255,77,109,0.25);
+        position: relative;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+
+    .download-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    }
+
+    .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 40px rgba(255,77,109,0.4);
+    }
+
+    .download-btn:active { transform: translateY(1px); }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+        display: none;
+        background: var(--surface);
+        border: 1px solid rgba(77,170,255,0.2);
+        border-radius: 14px;
+        padding: clamp(18px, 4vw, 28px);
+        margin-top: 20px;
+        animation: fadeUp 0.35s ease both;
+    }
+
+    .result-box.visible { display: block; }
+
+    .result-label {
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-bottom: 14px;
+    }
+
+    .result-link-wrap {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .result-link-wrap i {
+        color: var(--accent2);
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .result-link {
+        color: var(--accent2);
+        font-family: var(--mono);
+        font-size: clamp(0.65rem, 2vw, 0.8rem);
+        text-decoration: none;
+        flex: 1;
+        word-break: break-all;
+        line-height: 1.5;
+        transition: color 0.2s;
+    }
+
+    .result-link:hover { color: var(--accent); }
+
+    .result-name {
+        font-size: clamp(0.82rem, 2.3vw, 0.95rem);
+        color: var(--text);
+        font-weight: 500;
+        margin-bottom: 10px;
+    }
+
+    .result-note {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 7px;
+    }
+
+    .result-note i { color: var(--accent2); margin-top: 2px; flex-shrink: 0; }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer {
+        background: var(--surface2);
+        border-left: 3px solid var(--accent2);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        font-size: clamp(0.75rem, 2vw, 0.82rem);
+        color: var(--muted);
+        line-height: 1.65;
+    }
+
+    .disclaimer strong { color: var(--accent2); }
+
+    /* ── FOOTER ── */
+    footer {
+        text-align: center;
+        padding-top: 32px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .gh-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        text-decoration: none;
+        border: 1px solid var(--border);
+        padding: 8px 18px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        transition: all 0.2s;
+    }
+
+    .gh-link:hover {
+        color: var(--text);
+        border-color: rgba(255,255,255,0.15);
+        background: var(--surface2);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    </style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<header>
+    <h1>Static <em>Ableton</em> Downloader</h1>
+</header>
+
+<!-- OS SELECTION -->
+<div class="card" style="animation-delay:0.08s">
+    <div class="card-label"><i class="fas fa-desktop"></i> Operating System</div>
+    <div class="pill-group" id="os-group">
+        <button class="pill active" data-os="windows"><i class="fab fa-windows"></i> Windows</button>
+        <button class="pill" data-os="mac_intel"><i class="fab fa-apple"></i> macOS Intel</button>
+        <button class="pill" data-os="mac_arm"><i class="fab fa-apple"></i> macOS Apple Silicon</button>
+    </div>
+    <div class="detect-badge" id="detect-badge">Detecting your OS…</div>
+</div>
+
+<!-- EDITION SELECTION -->
+<div class="card" style="animation-delay:0.16s">
+    <div class="card-label"><i class="fas fa-layer-group"></i> Edition</div>
+    <div class="pill-group" id="edition-group">
+        <button class="pill active" data-edition="suite">Suite</button>
+        <button class="pill" data-edition="standard">Standard</button>
+        <button class="pill" data-edition="intro">Intro</button>
+        <button class="pill" data-edition="lite">Lite</button>
+    </div>
+</div>
+
+<!-- VERSION INPUT (Custom field only, no scroll and no use button) -->
+<div class="card" style="animation-delay:0.24s">
+    <div class="card-label"><i class="fas fa-tag"></i> Version</div>
+
+    <div class="custom-row">
+        <input class="custom-input" id="custom-input" type="text" placeholder="e.g. 12.4.5" autocomplete="off">
+    </div>
+    <p class="custom-hint">
+        <i class="fas fa-circle-info" style="margin-right: 6px;"></i>
+        Format: <strong>Major.Minor.Patch</strong> (e.g., <strong>12.4.5</strong>, <strong>11.0</strong>, <strong>10.0.6</strong>, <strong>9.7.7</strong>). Almost any version starting from <strong>9.6.2</strong>
+    </p>
+</div>
+
+<!-- DOWNLOAD BUTTON -->
+<button class="download-btn" id="dl-btn">
+    <i class="fas fa-download"></i> Generate Download Link
+</button>
+
+<!-- RESULT -->
+<div class="result-box" id="result-box">
+    <div class="result-label"><i class="fas fa-link"></i> Your download link</div>
+    <div class="result-name" id="result-name"></div>
+    <div class="result-link-wrap">
+        <i class="fas fa-file-zipper"></i>
+        <a class="result-link" id="result-link" target="_blank" rel="noopener">—</a>
+    </div>
+    <p class="result-note">
+        <i class="fas fa-circle-info"></i>
+        If the download doesn't start automatically, click the link above. The file is served directly from Ableton's CDN.
+    </p>
+</div>
+
+</div>
+
+<script>
+    (function() {
+        // ── STATE ─────────────────────────────────────────────────────────────────────
+        let selectedOS = 'windows';
+        let selectedEdition = 'suite';
+
+        // ── VERSION COMPARE ───────────────────────────────────────────────────────────
+        function cmpVer(a, b) {
+            const pa = a.split('.').map(Number), pb = b.split('.').map(Number);
+            for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+                const d = (pa[i]||0) - (pb[i]||0);
+                if (d) return d;
+            }
+            return 0;
+        }
+
+        // ── PILL GROUPS ───────────────────────────────────────────────────────────────
+        document.getElementById('os-group').addEventListener('click', e => {
+            const pill = e.target.closest('.pill');
+            if (!pill) return;
+            selectedOS = pill.dataset.os;
+            document.querySelectorAll('#os-group .pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+        });
+
+        document.getElementById('edition-group').addEventListener('click', e => {
+            const pill = e.target.closest('.pill');
+            if (!pill) return;
+            selectedEdition = pill.dataset.edition;
+            document.querySelectorAll('#edition-group .pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+        });
+
+        // ── DETECT OS ─────────────────────────────────────────────────────────────────
+        function detectOS() {
+            const ua = navigator.userAgent;
+            const badge = document.getElementById('detect-badge');
+            let os = 'windows', name = 'Windows';
+
+            if (ua.includes('Macintosh')) {
+                if (ua.includes('M1') || ua.includes('M2') || ua.includes('M3') || navigator.platform?.includes('MacARM')) {
+                    os = 'mac_arm'; name = 'Apple Silicon Mac';
+                } else {
+                    os = 'mac_intel'; name = 'Intel Mac';
+                }
+            }
+
+            selectedOS = os;
+            document.querySelectorAll('#os-group .pill').forEach(p => p.classList.remove('active'));
+            const target = document.querySelector(`#os-group .pill[data-os="${os}"]`);
+            if (target) target.classList.add('active');
+            badge.textContent = 'Detected: ' + name;
+        }
+
+        // ── BUILD URL ─────────────────────────────────────────────────────────────────
+        function buildURL(os, edition, version) {
+            let url = `https://cdn-downloads.ableton.com/channels/${version}/ableton_live_${edition}_${version}`;
+            if (os.startsWith('mac')) {
+                if (cmpVer(version, '11.0.12') > 0) {
+                    url += os === 'mac_intel' ? '_intel.dmg' : '_universal.dmg';
+                } else {
+                    url += '_64.dmg';
+                }
+            } else {
+                url += '_64.zip';
+            }
+            return url;
+        }
+
+        // ── VALIDATE VERSION ─────────────────────────────────────────────────────────
+        function validateVersion(version) {
+            if (!version) return false;
+            // Regex allows formats like 9, 9.0, 9.0.1, 12.4.5 etc.
+            if (!/^\d+(\.\d+){0,2}$/.test(version)) return false;
+            // Ensure version is at least 9.0.1
+            return cmpVer(version, '9.0.1') >= 0;
+        }
+
+        // ── DOWNLOAD BUTTON ───────────────────────────────────────────────────────────
+        document.getElementById('dl-btn').addEventListener('click', () => {
+            const input = document.getElementById('custom-input');
+            const version = input.value.trim();
+            const resultBox = document.getElementById('result-box');
+            const resultName = document.getElementById('result-name');
+            const resultLink = document.getElementById('result-link');
+
+            // Remove previous error state
+            input.classList.remove('error');
+
+            if (!validateVersion(version)) {
+                input.classList.add('error');
+                resultName.textContent = 'Invalid version. Please use a version 9.0.1 or higher (e.g., 12.4.5, 11.0).';
+                resultLink.textContent = '—';
+                resultLink.removeAttribute('href');
+                resultBox.classList.add('visible');
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                return;
+            }
+
+            const url = buildURL(selectedOS, selectedEdition, version);
+            const editionDisplay = selectedEdition.charAt(0).toUpperCase() + selectedEdition.slice(1);
+
+            resultName.textContent = `Ableton Live ${editionDisplay} ${version}`;
+            resultLink.href = url;
+            resultLink.textContent = url;
+            resultBox.classList.add('visible');
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Open link in a new tab
+            window.open(url, '_blank', 'noopener');
+        });
+
+        // ── INIT ──────────────────────────────────────────────────────────────────────
+        detectOS();
+
+        // Optional: focus the input field on load
+        // document.getElementById('custom-input').focus();
+    })();
+</script>
+
+<!-- Font Awesome for icons (added to support classes) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</body>
+</html>
